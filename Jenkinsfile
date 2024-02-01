@@ -4,7 +4,7 @@ pipeline {
     agent any
 
     environment {
-        GOOGLE_APPLICATION_CREDENTIALS = credentials('anilgcpcredentials')
+        GOOGLE_APPLICATION_CREDENTIALS = credentials('haritha-sri123')
     }
 
     stages {
@@ -12,7 +12,7 @@ pipeline {
             when {
                 anyOf {
                     branch 'develop'
-                    branch 'test'
+                    branch 'main'
                 }
             }
             steps {
@@ -27,7 +27,7 @@ pipeline {
                             sh 'terraform plan -out=output.tfplan'
                             sh 'terraform apply -auto-approve'
                         }
-                    } else if (env.BRANCH_NAME == 'test') {
+                    } else if (env.BRANCH_NAME == 'main') {
                         dir("ops/ArtifactRegistry/uat") {
                             sh 'terraform --version'
                             sh 'terraform init'
@@ -43,7 +43,7 @@ pipeline {
             when {
                 anyOf {
                     branch 'develop'
-                    branch 'test'
+                    branch 'main'
                 }
             }
             steps {
@@ -64,7 +64,7 @@ pipeline {
                             sh 'gcloud auth configure-docker asia-south1-docker.pkg.dev'
                             sh 'docker images'
                         }
-                    } else if (env.BRANCH_NAME == 'test') {
+                    } else if (env.BRANCH_NAME == 'main') {
                         dir("ops/src/uat") {
                             sh 'echo running uat build docker image'
                             sh 'docker --version'
@@ -85,7 +85,7 @@ pipeline {
             when {
                 anyOf {
                     branch 'develop'
-                    branch 'test'
+                    branch 'main'
                 }
             }
             steps {
@@ -114,7 +114,7 @@ pipeline {
                             sh 'kubectl apply -f deployment.yml'
                             sh 'kubectl apply -f service.yml'
                         }
-                    } else if (env.BRANCH_NAME == 'test') {
+                    } else if (env.BRANCH_NAME == 'main') {
                         dir("ops/CloudRunService/uat") {
                             sh 'terraform --version'
                             sh 'terraform init'
