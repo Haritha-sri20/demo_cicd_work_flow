@@ -18,7 +18,7 @@ pipeline {
             steps {
                 script {
                     sh 'gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS'
-                    sh 'gcloud config set project excellent-guide-410011'
+                    sh 'gcloud config set project haritha-project1'
 
                     if (env.BRANCH_NAME == 'develop') {
                         dir("ops/ArtifactRegistry/dev") {
@@ -49,7 +49,7 @@ pipeline {
             steps {
                 script {
                     sh 'gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS'
-                    sh 'gcloud config set project excellent-guide-410011'
+                    sh 'gcloud config set project haritha-project1'
 
                     if (env.BRANCH_NAME == 'develop') {
                         dir("ops/src/dev") {
@@ -59,7 +59,7 @@ pipeline {
                             sh 'docker images'
                             imageTag = "latest-${env.BUILD_NUMBER}" // or use a timestamp or commit hash
                             sh "docker build -t pythondemoimage:${imageTag} ."
-                            sh "docker tag pythondemoimage:${imageTag} asia-south1-docker.pkg.dev/excellent-guide-410011/anil-cicd-demo-dev-repo/pythondemoimage:${imageTag}"
+                            sh "docker tag pythondemoimage:${imageTag} asia-south1-docker.pkg.dev/haritha-project1/anil-cicd-demo-dev-repo/pythondemoimage:${imageTag}"
                             sh "docker push asia-south1-docker.pkg.dev/excellent-guide-410011/anil-cicd-demo-dev-repo/pythondemoimage:${imageTag}"
                             sh 'gcloud auth configure-docker asia-south1-docker.pkg.dev'
                             sh 'docker images'
@@ -91,11 +91,11 @@ pipeline {
             steps {
                 script {
                     sh 'gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS'
-                    sh 'gcloud config set project excellent-guide-410011'
+                    sh 'gcloud config set project haritha-project1'
 
                     if (env.BRANCH_NAME == 'develop') {
                         dir("ops/CloudRunService/dev") {
-                            sh "sed -i 's|asia-south1-docker.pkg.dev/excellent-guide-410011/anil-cicd-demo-dev-repo/pythondemoimage:\${imageTag}|asia-south1-docker.pkg.dev/excellent-guide-410011/anil-cicd-demo-dev-repo/pythondemoimage:${imageTag}|' main.tf"
+                            sh "sed -i 's|asia-south1-docker.pkg.dev/haritha-project1/anil-cicd-demo-dev-repo/pythondemoimage:\${imageTag}|asia-south1-docker.pkg.dev/excellent-guide-410011/anil-cicd-demo-dev-repo/pythondemoimage:${imageTag}|' main.tf"
                             sh 'terraform --version'
                             sh 'terraform init'
                             sh 'terraform plan -out=output.tfplan'
@@ -110,7 +110,7 @@ pipeline {
                             sh 'gcloud config set project excellent-guide-410011'
                             sh 'kubectl config view'
                             sh 'gcloud container clusters get-credentials anil-demo-gke-cluster --region asia-south1 --project excellent-guide-410011'
-                            sh "sed -i 's|asia-south1-docker.pkg.dev/excellent-guide-410011/anil-cicd-demo-dev-repo/pythondemoimage:\${imageTag}|asia-south1-docker.pkg.dev/excellent-guide-410011/anil-cicd-demo-dev-repo/pythondemoimage:${imageTag}|' deployment.yml"
+                            sh "sed -i 's|asia-south1-docker.pkg.dev/haritha-project1/anil-cicd-demo-dev-repo/pythondemoimage:\${imageTag}|asia-south1-docker.pkg.dev/excellent-guide-410011/anil-cicd-demo-dev-repo/pythondemoimage:${imageTag}|' deployment.yml"
                             sh 'kubectl apply -f deployment.yml'
                             sh 'kubectl apply -f service.yml'
                         }
@@ -133,7 +133,7 @@ pipeline {
             steps {
                 script {
                     sh 'gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS'
-                    sh 'gcloud config set project excellent-guide-410011'
+                    sh 'gcloud config set project haritha-project1'
 
                     if (env.BRANCH_NAME == 'main') {
                         dir("ops/ArtifactRegistry/prod") {
@@ -149,8 +149,8 @@ pipeline {
                             sh 'docker build -t pythondemoimage'
                             sh 'gcloud auth configure-docker asia-south1-docker.pkg.dev'
                             sh 'docker images'
-                            sh 'docker tag pythondemoimage asia-south1-docker.pkg.dev/excellent-guide-410011/anil-cicd-demo-prod-repo/pythondemoimage:latest'
-                            sh 'docker push asia-south1-docker.pkg.dev/excellent-guide-410011/anil-cicd-demo-prod-repo/pythondemoimage:latest'
+                            sh 'docker tag pythondemoimage asia-south1-docker.pkg.dev/haritha-project1/anil-cicd-demo-prod-repo/pythondemoimage:latest'
+                            sh 'docker push asia-south1-docker.pkg.dev/haritha-project1/anil-cicd-demo-prod-repo/pythondemoimage:latest'
                         }
                         dir("ops/CloudRunService/prod") {
                             sh 'terraform --version'
